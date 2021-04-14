@@ -6,7 +6,7 @@ public enum OperationType {
 
     private final Class type;
 
-    OperationType(Class clazz){
+    OperationType(Class clazz) {
         this.type = clazz;
     }
 

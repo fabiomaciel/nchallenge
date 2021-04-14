@@ -1,28 +1,40 @@
 package com.challenge.ntest.domain.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class AccountState {
 
-    @JsonProperty("active-card")
-    private boolean activeCard;
+    private Account account;
+    private Violations violations;
 
-    @JsonProperty("available-limit")
-    private long availableLimit;
-
-    public boolean isActiveCard() {
-        return activeCard;
+    public AccountState() {
+        this.violations = new Violations();
     }
 
-    public void setActiveCard(boolean activeCard) {
-        this.activeCard = activeCard;
+    public AccountState(Account account) {
+        this(account, new Violations());
     }
 
-    public long getAvailableLimit() {
-        return availableLimit;
+    public AccountState(Account account, Violations violations) {
+        this.violations = violations;
+        this.account = account;
     }
 
-    public void setAvailableLimit(long availableLimit) {
-        this.availableLimit = availableLimit;
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Violations getViolations() {
+        return violations;
+    }
+
+    public void setViolations(Violations violations) {
+        this.violations = violations;
+    }
+
+    public void addViolation(String violation) {
+        this.violations.add(violation);
     }
 }

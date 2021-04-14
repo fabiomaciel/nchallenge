@@ -2,10 +2,19 @@ package com.challenge.ntest.domain.models;
 
 import java.time.LocalDateTime;
 
-public class Transaction{
+public class Transaction {
     private String merchant;
     private long amount;
     private LocalDateTime time;
+
+    public Transaction() {
+    }
+
+    public Transaction(String merchant, long amount, LocalDateTime time) {
+        this.merchant = merchant;
+        this.amount = amount;
+        this.time = time;
+    }
 
     public String getMerchant() {
         return merchant;
