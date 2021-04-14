@@ -11,11 +11,11 @@ public class TransactionHistoryValidation {
 
     public static void historyValidation(StateHistory history, Transaction transaction, Violations violations) {
         LinkedList<Transaction> last2 = getLastTransactions(history);
-        highFrequencyValidation(history, transaction, violations, last2);
-        doubleTransactionValidation(history, transaction, violations, last2);
+        highFrequencyValidation(transaction, violations, last2);
+        doubleTransactionValidation(transaction, violations, last2);
     }
 
-    private static void doubleTransactionValidation(StateHistory history, Transaction transaction, Violations violations, LinkedList<Transaction> last2) {
+    private static void doubleTransactionValidation(Transaction transaction, Violations violations, LinkedList<Transaction> last2) {
         if (last2.size() > 1) {
             Transaction lastTransaction = last2.getFirst();
             long diff = ChronoUnit.MINUTES.between(lastTransaction.getTime(), transaction.getTime());
@@ -29,7 +29,7 @@ public class TransactionHistoryValidation {
         }
     }
 
-    private static void highFrequencyValidation(StateHistory history, Transaction transaction, Violations violations, LinkedList<Transaction> last2) {
+    private static void highFrequencyValidation(Transaction transaction, Violations violations, LinkedList<Transaction> last2) {
         if (last2.size() == 2) {
             long diff = ChronoUnit.MINUTES.between(last2.getLast().getTime(), transaction.getTime());
             if (diff <= 2) {

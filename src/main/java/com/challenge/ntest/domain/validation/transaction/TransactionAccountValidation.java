@@ -1,7 +1,10 @@
 package com.challenge.ntest.domain.validation.transaction;
 
 import com.challenge.ntest.domain.exceptions.ValidationException;
-import com.challenge.ntest.domain.models.*;
+import com.challenge.ntest.domain.models.StateHistory;
+import com.challenge.ntest.domain.models.Transaction;
+import com.challenge.ntest.domain.models.ViolationType;
+import com.challenge.ntest.domain.models.Violations;
 
 import java.util.Objects;
 
