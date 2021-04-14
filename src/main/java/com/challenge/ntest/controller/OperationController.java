@@ -1,14 +1,17 @@
-package com.challenge.ntest.domain.services;
+package com.challenge.ntest.controller;
 
 import com.challenge.ntest.domain.commons.OperationMapper;
+import com.challenge.ntest.domain.services.InputProcessor;
+import com.challenge.ntest.domain.services.OutputProcessor;
+import com.challenge.ntest.domain.services.StateManager;
 
-public class OperationsProcessor {
+public class OperationController {
 
     final OperationMapper mapper;
     final InputProcessor<String> input;
     final OutputProcessor<String> output;
 
-    public OperationsProcessor(OperationMapper mapper, InputProcessor<String> input, OutputProcessor<String> output) {
+    public OperationController(OperationMapper mapper, InputProcessor<String> input, OutputProcessor<String> output) {
         this.mapper = mapper;
         this.input = input;
         this.output = output;

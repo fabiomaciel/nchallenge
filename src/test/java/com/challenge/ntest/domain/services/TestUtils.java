@@ -5,11 +5,14 @@ import com.challenge.ntest.domain.models.AccountState;
 import com.challenge.ntest.domain.models.StateHistory;
 import com.challenge.ntest.domain.models.Violations;
 
+import java.util.Objects;
+
 public class TestUtils {
 
     public static StateHistory createHistory(Account account) {
         StateHistory history = new StateHistory();
-        history.add(new AccountState(account, new Violations()));
+        if(Objects.nonNull(account))
+            history.add(new AccountState(account, new Violations(), null));
         return history;
     }
 }

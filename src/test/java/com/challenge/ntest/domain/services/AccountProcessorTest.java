@@ -16,20 +16,24 @@ public class AccountProcessorTest {
     @Test
     public void shouldReturnAccountStateWithoutErrors(){
 
-        AccountState state = AccountProcessor.process(createHistory(null), ACTIVE_ACCOUNT, AccountState::new);
+        StateHistory history = createHistory(null);
+        AccountState state = AccountProcessor.process(history, ACTIVE_ACCOUNT);
 
         assertThat(state.getAccount(), Is.is(ACTIVE_ACCOUNT));
         assertThat(state.getViolations(), hasSize(0));
+        assertThat(history, hasSize(1));
     }
 
     @Test
     public void shouldViolateCardAlreadyActive(){
         Account account = new Account(true, 200);
-        AccountState state = AccountProcessor.process(createHistory(ACTIVE_ACCOUNT), account, AccountState::new);
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+        AccountState state = AccountProcessor.process(history, account);
 
         assertThat(state.getAccount(), Is.is(ACTIVE_ACCOUNT));
         assertThat(state.getViolations(), hasSize(1));
         assertThat(state.getViolations().getFirst(), is(ViolationType.ACCOUNT_ALREADY_INITIALIZED.getDescription()));
+        assertThat(history, hasSize(2));
     }
 
 }

@@ -4,6 +4,7 @@ import com.challenge.ntest.domain.models.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static com.challenge.ntest.domain.services.TestUtils.createHistory;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,11 +22,14 @@ public class TransactionProcessorTest {
     public void shouldReturnAccountStateWithoutErrors() {
         Transaction transaction = new Transaction("habib's", 20, NOW);
 
-        AccountState state = TransactionProcessor.process(createHistory(ACTIVE_ACCOUNT), transaction, AccountState::new);
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+        AccountState state = TransactionProcessor.process(history, transaction);
 
         assertThat(state.getViolations(), hasSize(0));
         assertThat(state.getAccount(), is(notNullValue()));
         assertThat(state.getAccount().getAvailableLimit(), is(80L));
+
+        assertThat(history, hasSize(2));
 
     }
 
@@ -33,35 +37,88 @@ public class TransactionProcessorTest {
     public void shouldViolateCardANotActive() {
         Transaction transaction = new Transaction("habib's", 20, NOW);
 
+        StateHistory history = createHistory(INACTIVE_ACCOUNT);
         AccountState state = TransactionProcessor
-                .process(createHistory(INACTIVE_ACCOUNT), transaction, AccountState::new);
+                .process(history, transaction);
 
         assertThat(state.getViolations(), hasSize(1));
         assertThat(state.getViolations().getFirst(), is(ViolationType.CARD_NOT_ACTIVE.getDescription()));
         assertThat(state.getAccount(), is(notNullValue()));
         assertThat(state.getAccount().getAvailableLimit(), is(100L));
+
+        assertThat(history, hasSize(2));
     }
 
     @Test
     public void shouldViolateInsufficientLimit() {
         Transaction transaction = new Transaction("habib's", 101, NOW);
 
-        AccountState state = TransactionProcessor.process(createHistory(ACTIVE_ACCOUNT), transaction, AccountState::new);
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+        AccountState state = TransactionProcessor.process(history, transaction);
 
         assertThat(state.getViolations(), hasSize(1));
         assertThat(state.getViolations().getFirst(), is(ViolationType.INSUFFICIENT_LIMIT.getDescription()));
         assertThat(state.getAccount(), is(notNullValue()));
         assertThat(state.getAccount().getAvailableLimit(), is(100L));
+
+        assertThat(history, hasSize(2));
     }
 
     @Test
     public void shouldViolateAccountNotInitialized() {
         Transaction transaction = new Transaction("habib's", 20, NOW);
+        StateHistory history = createHistory(null);
         AccountState state = TransactionProcessor
-                .process(createHistory(null), transaction, AccountState::new);
+                .process(history, transaction);
 
         assertThat(state.getViolations(), hasSize(1));
         assertThat(state.getViolations().getFirst(), is(ViolationType.ACCOUNT_NOT_INITIALIZED.getDescription()));
         assertThat(state.getAccount(), is(nullValue()));
+
+        assertThat(history, hasSize(1));
+    }
+
+    @Test
+    public void shouldViolateHighFrequencySmallInterval() {
+        var transactionList = Arrays.asList(
+                new Transaction("habib's", 20, NOW),
+                new Transaction("habib's 2", 20, NOW.plusSeconds(10)),
+                new Transaction("habib's 3", 20, NOW.plusSeconds(20))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> {
+            TransactionProcessor.process(history, transaction);
+        });
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(1));
+        assertThat(state.getViolations().getFirst(), is(ViolationType.HIGH_FREQUENCY_SMALL_INTERVAL.getDescription()));
+        assertThat(state.getAccount(), is(notNullValue()));
+
+        assertThat(history, hasSize(4));
+    }
+
+    @Test
+    public void shouldViolateDoubleTransaction() {
+        var transactionList = Arrays.asList(
+                new Transaction("habib's 1", 20, NOW.minusHours(1)),
+                new Transaction("habib's", 20, NOW.plusSeconds(10)),
+                new Transaction("habib's", 20, NOW.plusSeconds(20))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> TransactionProcessor.process(history, transaction));
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(1));
+        assertThat(state.getViolations().getFirst(), is(ViolationType.DOUBLE_TRANSACTION.getDescription()));
+        assertThat(state.getAccount(), is(notNullValue()));
+
+        assertThat(history, hasSize(4));
     }
 }

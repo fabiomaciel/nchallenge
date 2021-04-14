@@ -2,7 +2,7 @@ package com.challenge.ntest.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Account {
+public class Account implements Cloneable {
 
     @JsonProperty("active-card")
     private boolean activeCard;
@@ -11,13 +11,6 @@ public class Account {
     private long availableLimit;
 
     public Account() {
-        this.activeCard = false;
-        this.availableLimit = 0L;
-    }
-
-    public Account(long availableLimit) {
-        this.activeCard = true;
-        this.availableLimit = availableLimit;
     }
 
     public Account(boolean activeCard, long availableLimit) {
@@ -39,5 +32,10 @@ public class Account {
 
     public void setAvailableLimit(long availableLimit) {
         this.availableLimit = availableLimit;
+    }
+
+    @Override
+    public Account clone() {
+        return new Account(this.activeCard, this.availableLimit);
     }
 }

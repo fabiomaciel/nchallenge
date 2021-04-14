@@ -6,7 +6,6 @@ import com.challenge.ntest.domain.models.StateHistory;
 import com.challenge.ntest.domain.models.Transaction;
 
 import java.util.List;
-import java.util.Optional;
 
 public class StateManager {
 
@@ -32,27 +31,12 @@ public class StateManager {
         return null;
     }
 
-
     public AccountState performOperation(Account account) {
-        return AccountProcessor.process(
-                history,
-                account,
-                (current, violations) -> addState(new AccountState(current, violations))
-        );
+        return AccountProcessor.process(history, account);
     }
 
     public AccountState performOperation(Transaction transaction) {
-        return TransactionProcessor.process(
-                history,
-                transaction,
-                (account, violations) -> addState(new AccountState(account, violations))
-        );
+        return TransactionProcessor.process(history, transaction);
     }
-
-    public AccountState addState(AccountState state) {
-        history.add(state);
-        return state;
-    }
-
 
 }

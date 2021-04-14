@@ -16,4 +16,10 @@ public class StateHistory extends LinkedList<AccountState>{
                 .orElse(null);
     }
 
+    public AccountState add(Account account, Violations violations, Transaction transaction){
+        final AccountState state = new AccountState(account, violations, transaction);
+        add(state);
+        return state;
+    }
+
 }
