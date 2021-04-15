@@ -10,11 +10,6 @@ public class AccountState {
     @JsonIgnore
     private Transaction transaction;
 
-    public AccountState() {
-        this.violations = new Violations();
-    }
-
-
     public AccountState(Account account, Violations violations, Transaction transaction) {
         this.violations = violations;
         this.account = account;
@@ -35,10 +30,6 @@ public class AccountState {
 
     public void setViolations(Violations violations) {
         this.violations = violations;
-    }
-
-    public void addViolation(String violation) {
-        this.violations.add(violation);
     }
 
     public Transaction getTransaction() {

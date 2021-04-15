@@ -52,7 +52,9 @@ public class OperationsControllerTest {
             "insuficient-limit",
             "account-already-initialized",
             "high-frequency",
-            "double-transaction"
+            "double-transaction",
+            "insuficient-limit+high-frequency",
+            "insuficient-limit+double-transaction"
 
     })
     public void shouldProcessInputAndOutputProperly(String folder){

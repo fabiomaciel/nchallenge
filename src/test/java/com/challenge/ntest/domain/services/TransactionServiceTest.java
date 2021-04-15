@@ -1,6 +1,7 @@
 package com.challenge.ntest.domain.services;
 
 import com.challenge.ntest.domain.models.*;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -104,6 +105,30 @@ public class TransactionServiceTest {
     }
 
     @Test
+    public void shouldViolateHighFrequencySmallIntervalAndInsufficientLimit() {
+        var transactionList = Arrays.asList(
+                new Transaction("habib's", 20, NOW),
+                new Transaction("habib's 2", 20, NOW.plusSeconds(10)),
+                new Transaction("habib's 3", 80, NOW.plusSeconds(20))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> {
+            transactionService.process(history, transaction);
+        });
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(2));
+        assertThat(state.getViolations().getFirst(), is(ViolationType.INSUFFICIENT_LIMIT.getDescription()));
+        assertThat(state.getViolations().getLast(), is(ViolationType.HIGH_FREQUENCY_SMALL_INTERVAL.getDescription()));
+        assertThat(state.getAccount(), is(notNullValue()));
+
+        assertThat(history, hasSize(4));
+    }
+
+    @Test
     public void shouldViolateDoubleTransaction() {
         var transactionList = Arrays.asList(
                 new Transaction("habib's", 20, NOW.plusSeconds(10)),
@@ -121,6 +146,79 @@ public class TransactionServiceTest {
         assertThat(state.getAccount(), is(notNullValue()));
 
         assertThat(history, hasSize(3));
+    }
+
+    @Test
+    public void shouldViolateDoubleTransactionAndInsufficientLimit() {
+        var transactionList = Arrays.asList(
+                new Transaction("habib's", 80, NOW.plusSeconds(10)),
+                new Transaction("habib's", 80, NOW.plusSeconds(20))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> transactionService.process(history, transaction));
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(2));
+        assertThat(state.getViolations().getLast(), is(ViolationType.DOUBLE_TRANSACTION.getDescription()));
+        assertThat(state.getViolations().getFirst(), is(ViolationType.INSUFFICIENT_LIMIT.getDescription()));
+        assertThat(state.getAccount(), is(notNullValue()));
+
+        assertThat(history, hasSize(3));
+    }
+
+    @Test
+    public void shouldViolateDoubleTransactionAndHighFrequency() {
+        var transactionList = Arrays.asList(
+                new Transaction("Mc Donalds", 20, NOW),
+                new Transaction("habib's", 20, NOW.plusSeconds(10)),
+                new Transaction("habib's", 20, NOW.plusSeconds(20))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> transactionService.process(history, transaction));
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(2));
+        assertThat(state.getViolations().getLast(), is(ViolationType.DOUBLE_TRANSACTION.getDescription()));
+        assertThat(state.getViolations().getFirst(), is(ViolationType.HIGH_FREQUENCY_SMALL_INTERVAL.getDescription()));
+        assertThat(state.getAccount(), is(notNullValue()));
+
+        assertThat(history, hasSize(4));
+    }
+
+    @Test
+    public void shouldViolateDoubleTransactionAndHighFrequencyAndInsufficientLimit() {
+        var transactionList = Arrays.asList(
+                new Transaction("Mc Donalds", 20, NOW),
+                new Transaction("habib's", 60, NOW.plusSeconds(10)),
+                new Transaction("habib's", 60, NOW.plusSeconds(20))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> transactionService.process(history, transaction));
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(3));
+
+        var violations = Arrays.asList(
+                ViolationType.INSUFFICIENT_LIMIT,
+                ViolationType.HIGH_FREQUENCY_SMALL_INTERVAL,
+                ViolationType.DOUBLE_TRANSACTION
+        );
+
+        for (int i = 0; i < state.getViolations().size(); i++) {
+            assertThat(state.getViolations().get(i), Is.is(violations.get(i).getDescription()));
+        }
+        assertThat(state.getAccount(), is(notNullValue()));
+
+        assertThat(history, hasSize(4));
     }
 
     @Test

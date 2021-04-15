@@ -24,7 +24,7 @@ public class TransactionService {
 
     }
 
-    private long getSpare(StateHistory history, Transaction transaction){
+    private long getSpare(StateHistory history, Transaction transaction) {
         return history.getCurrentAccount().getAvailableLimit() - transaction.getAmount();
     }
 

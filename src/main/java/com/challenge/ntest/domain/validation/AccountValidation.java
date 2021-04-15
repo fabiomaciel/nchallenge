@@ -9,11 +9,13 @@ import java.util.Objects;
 
 public class AccountValidation {
 
-    public static void validate(StateHistory history, Violations violations){
+    public static void validate(StateHistory history, Violations violations) {
         if (Objects.nonNull(history.getCurrentAccount())) {
             violations.add(ViolationType.ACCOUNT_ALREADY_INITIALIZED);
             throw new ValidationException(ViolationType.ACCOUNT_ALREADY_INITIALIZED);
         }
     }
 
+    private AccountValidation() {
+    }
 }
