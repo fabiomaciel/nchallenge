@@ -14,7 +14,6 @@ public class TransactionValidation {
         historyValidation(history, transaction, violations);
     }
 
-
-
-
+    private TransactionValidation() {
+    }
 }

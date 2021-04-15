@@ -1,4 +1,4 @@
-package com.challenge.ntest.domain.services;
+package com.challenge.ntest.infrastructure.processor;
 
 import java.util.function.Supplier;
 

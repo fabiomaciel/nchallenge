@@ -7,9 +7,9 @@ import java.util.Optional;
 
 import static com.challenge.ntest.domain.validation.TransactionValidation.transactionValidation;
 
-public class TransactionProcessor {
+public class TransactionService {
 
-    public static AccountState process(StateHistory history, Transaction transaction) {
+    public AccountState process(StateHistory history, Transaction transaction) {
         Violations violations = new Violations();
 
         Account account = history.getCurrentAccount();
@@ -24,7 +24,7 @@ public class TransactionProcessor {
 
     }
 
-    private static long getSpare(StateHistory history, Transaction transaction){
+    private long getSpare(StateHistory history, Transaction transaction){
         return history.getCurrentAccount().getAvailableLimit() - transaction.getAmount();
     }
 

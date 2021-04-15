@@ -1,4 +1,6 @@
-package com.challenge.ntest.domain.services;
+package com.challenge.ntest.infrastructure.processor.standard;
+
+import com.challenge.ntest.infrastructure.processor.InputProcessor;
 
 import java.util.Scanner;
 import java.util.function.Consumer;

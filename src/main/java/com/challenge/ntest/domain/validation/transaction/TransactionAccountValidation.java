@@ -38,4 +38,7 @@ public class TransactionAccountValidation {
             throw new ValidationException(ViolationType.CARD_NOT_ACTIVE);
         }
     }
+
+    private TransactionAccountValidation() {
+    }
 }

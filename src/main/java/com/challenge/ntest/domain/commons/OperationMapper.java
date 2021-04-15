@@ -21,7 +21,7 @@ public class OperationMapper {
 
     @SuppressWarnings("unchecked")
     public <T> T convertValue(String line)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException, JsonProcessingException {
         var operationNode = getOperationNode(mapper, line);
         final OperationType operationType = getOperationType(operationNode);
 
@@ -31,26 +31,18 @@ public class OperationMapper {
         return mapper.convertValue(root, javaType);
     }
 
-    public <T> String writeListAsString(List<T> ob) {
+    public <T> String writeListAsString(List<T> list) throws JsonProcessingException {
         final StringBuilder builer = new StringBuilder();
-        ob.forEach(line -> {
-            try {
-                builer.append(mapper.writeValueAsString(line))
-                        .append("\n");
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
+        for (T line : list) {
+            builer.append(mapper.writeValueAsString(line))
+                    .append("\n");
+        }
 
         return builer.toString();
     }
 
-    private JsonNode getOperationNode(ObjectMapper mapper, String line) {
-        try {
-            return mapper.readTree(line);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Unespected Error");
-        }
+    private JsonNode getOperationNode(ObjectMapper mapper, String line) throws JsonProcessingException {
+        return mapper.readTree(line);
     }
 
     private OperationType getOperationType(JsonNode operationNode) {

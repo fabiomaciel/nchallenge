@@ -1,4 +1,6 @@
-package com.challenge.ntest.domain.services;
+package com.challenge.ntest.infrastructure.processor.standard;
+
+import com.challenge.ntest.infrastructure.processor.OutputProcessor;
 
 import java.util.function.Supplier;
 

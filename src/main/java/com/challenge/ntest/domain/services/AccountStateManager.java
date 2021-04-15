@@ -7,12 +7,16 @@ import com.challenge.ntest.domain.models.Transaction;
 
 import java.util.List;
 
-public class StateManager {
+public class AccountStateManager {
 
     private final StateHistory history;
+    private final AccountService accountService;
+    private final TransactionService transactionService;
 
-    public StateManager() {
+    public AccountStateManager() {
         this.history = new StateHistory();
+        this.accountService = new AccountService();
+        this.transactionService = new TransactionService();
     }
 
     public List<AccountState> getHistory() {
@@ -32,11 +36,11 @@ public class StateManager {
     }
 
     public AccountState performOperation(Account account) {
-        return AccountProcessor.process(history, account);
+        return accountService.process(history, account);
     }
 
     public AccountState performOperation(Transaction transaction) {
-        return TransactionProcessor.process(history, transaction);
+        return transactionService.process(history, transaction);
     }
 
 }
