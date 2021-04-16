@@ -77,6 +77,6 @@ cat input/operations | docker container run -i nuchallenge
 ```
 
 
-### note
+### Note:
 
 _[input/operations] options above could be any file path_ 

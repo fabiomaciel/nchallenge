@@ -6,15 +6,17 @@ import com.challenge.nuchallenge.infrastructure.processor.OutputProcessor;
 import com.challenge.nuchallenge.infrastructure.processor.standard.StdInProcessor;
 import com.challenge.nuchallenge.infrastructure.processor.standard.StdOutProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
-
-import java.io.*;
-import java.util.Scanner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;

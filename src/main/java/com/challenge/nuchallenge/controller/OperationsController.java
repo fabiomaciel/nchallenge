@@ -4,8 +4,6 @@ import com.challenge.nuchallenge.domain.commons.OperationMapper;
 import com.challenge.nuchallenge.domain.services.AccountStateManager;
 import com.challenge.nuchallenge.infrastructure.processor.InputProcessor;
 import com.challenge.nuchallenge.infrastructure.processor.OutputProcessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.io.IOException;
 
 public class OperationsController {

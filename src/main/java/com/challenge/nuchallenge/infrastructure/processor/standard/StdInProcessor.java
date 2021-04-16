@@ -1,7 +1,6 @@
 package com.challenge.nuchallenge.infrastructure.processor.standard;
 
 import com.challenge.nuchallenge.infrastructure.processor.InputProcessor;
-
 import java.util.Scanner;
 import java.util.function.Consumer;
 

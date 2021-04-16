@@ -2,7 +2,6 @@ package com.challenge.nuchallenge.domain.services;
 
 import com.challenge.nuchallenge.domain.exceptions.ValidationException;
 import com.challenge.nuchallenge.domain.models.*;
-
 import java.util.Optional;
 
 import static com.challenge.nuchallenge.domain.validation.TransactionValidation.transactionValidation;

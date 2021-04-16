@@ -3,10 +3,9 @@ package com.challenge.nuchallenge.domain.services;
 import com.challenge.nuchallenge.domain.models.Account;
 import com.challenge.nuchallenge.domain.models.AccountState;
 import com.challenge.nuchallenge.domain.models.Transaction;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.time.LocalDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

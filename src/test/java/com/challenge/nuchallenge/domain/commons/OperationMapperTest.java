@@ -2,14 +2,12 @@ package com.challenge.nuchallenge.domain.commons;
 
 import com.challenge.nuchallenge.domain.models.Account;
 import com.challenge.nuchallenge.domain.models.Transaction;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import org.hamcrest.core.Is;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;

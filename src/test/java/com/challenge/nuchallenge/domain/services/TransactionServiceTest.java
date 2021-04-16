@@ -1,11 +1,10 @@
 package com.challenge.nuchallenge.domain.services;
 
 import com.challenge.nuchallenge.domain.models.*;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import org.hamcrest.core.Is;
+import org.junit.jupiter.api.Test;
 
 import static com.challenge.nuchallenge.domain.services.TestUtils.createHistory;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -172,8 +171,8 @@ public class TransactionServiceTest {
     @Test
     public void shouldViolateDoubleTransactionAndHighFrequency() {
         var transactionList = Arrays.asList(
-                new Transaction("Mc Donalds", 20, NOW),
-                new Transaction("habib's", 20, NOW.plusSeconds(10)),
+                new Transaction("habib's", 20, NOW),
+                new Transaction("Mc Donalds", 20, NOW.plusSeconds(10)),
                 new Transaction("habib's", 20, NOW.plusSeconds(20))
         );
 
@@ -189,6 +188,31 @@ public class TransactionServiceTest {
         assertThat(state.getAccount(), is(notNullValue()));
 
         assertThat(history, hasSize(4));
+    }
+
+    @Test
+    public void shouldViolateDoubleTransactionAndHighFrequency2() {
+        var transactionList = Arrays.asList(
+                new Transaction("Burger King", 5, NOW.minusSeconds(10)),
+                new Transaction("habib's", 5, NOW),
+                new Transaction("Mc Donalds", 5, NOW.plusSeconds(10)),
+                new Transaction("habib's", 5, NOW.plusSeconds(20)),
+                new Transaction("Mc Donalds", 5, NOW.plusSeconds(30)),
+                new Transaction("habib's", 5, NOW.plusSeconds(40)),
+                new Transaction("Burger King", 5, NOW.minusSeconds(50))
+        );
+
+        StateHistory history = createHistory(ACTIVE_ACCOUNT);
+
+        transactionList.forEach(transaction -> transactionService.process(history, transaction));
+
+        var state = history.getCurrent();
+
+        assertThat(state.getViolations(), hasSize(2));
+        assertThat(state.getViolations().getLast(), is(ViolationType.DOUBLE_TRANSACTION.getDescription()));
+        assertThat(state.getViolations().getFirst(), is(ViolationType.HIGH_FREQUENCY_SMALL_INTERVAL.getDescription()));
+        assertThat(state.getAccount(), is(notNullValue()));
+        assertThat(history, hasSize(8));
     }
 
     @Test

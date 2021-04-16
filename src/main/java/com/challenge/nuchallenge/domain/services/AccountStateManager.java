@@ -4,7 +4,6 @@ import com.challenge.nuchallenge.domain.models.Account;
 import com.challenge.nuchallenge.domain.models.AccountState;
 import com.challenge.nuchallenge.domain.models.StateHistory;
 import com.challenge.nuchallenge.domain.models.Transaction;
-
 import java.util.List;
 
 public class AccountStateManager {

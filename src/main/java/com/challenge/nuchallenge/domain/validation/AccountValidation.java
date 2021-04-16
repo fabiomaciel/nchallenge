@@ -4,7 +4,6 @@ import com.challenge.nuchallenge.domain.exceptions.ValidationException;
 import com.challenge.nuchallenge.domain.models.StateHistory;
 import com.challenge.nuchallenge.domain.models.ViolationType;
 import com.challenge.nuchallenge.domain.models.Violations;
-
 import java.util.Objects;
 
 public class AccountValidation {

@@ -1,10 +1,9 @@
 package com.challenge.nuchallenge.infrastructure.processor.standard;
 
 import com.challenge.nuchallenge.infrastructure.processor.InputProcessor;
+import java.io.ByteArrayInputStream;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
